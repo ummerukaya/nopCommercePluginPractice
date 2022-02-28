@@ -4,26 +4,36 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Nop.Core;
+using Nop.Core.Domain;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Forums;
 using Nop.Core.Domain.Gdpr;
+using Nop.Core.Domain.Localization;
+using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Messages;
+using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Events;
+using Nop.Services.Authentication.External;
+using Nop.Services.Authentication.MultiFactor;
+using Nop.Services.Catalog;
 using Nop.Services.Common;
 using Nop.Services.Customers;
+using Nop.Services.Directory;
 using Nop.Services.ExportImport;
 using Nop.Services.Forums;
 using Nop.Services.Gdpr;
 using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
+using Nop.Services.Media;
 using Nop.Services.Messages;
 using Nop.Services.Orders;
 using Nop.Services.Security;
@@ -74,6 +84,27 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly IWorkContext _workContext;
         private readonly IWorkflowMessageService _workflowMessageService;
         private readonly TaxSettings _taxSettings;
+
+        public AddressSettings AddressSettings { get; }
+        public CaptchaSettings CaptchaSettings { get; }
+        public IDownloadService DownloadService { get; }
+        public IAddressModelFactory AddressModelFactory { get; }
+        public IAuthenticationService AuthenticationService { get; }
+        public ICountryService CountryService { get; }
+        public ICurrencyService CurrencyService { get; }
+        public IExternalAuthenticationService ExternalAuthenticationService { get; }
+        public IGiftCardService GiftCardService { get; }
+        public ILogger Logger { get; }
+        public IMultiFactorAuthenticationPluginManager MultiFactorAuthenticationPluginManager { get; }
+        public IOrderService OrderService { get; }
+        public IPictureService PictureService { get; }
+        public IPriceFormatter PriceFormatter { get; }
+        public IProductService ProductService { get; }
+        public IStateProvinceService StateProvinceService { get; }
+        public LocalizationSettings LocalizationSettings { get; }
+        public MediaSettings MediaSettings { get; }
+        public MultiFactorAuthenticationSettings MultiFactorAuthenticationSettings { get; }
+        public StoreInformationSettings StoreInformationSettings { get; }
 
         #endregion
 
@@ -143,6 +174,54 @@ namespace Nop.Web.Areas.Admin.Controllers
             _taxService = taxService;
             _workContext = workContext;
             _workflowMessageService = workflowMessageService;
+            _taxSettings = taxSettings;
+        }
+
+        public CustomerController(AddressSettings addressSettings, CaptchaSettings captchaSettings, CustomerSettings customerSettings, DateTimeSettings dateTimeSettings, IDownloadService downloadService, ForumSettings forumSettings, GdprSettings gdprSettings, IAddressAttributeParser addressAttributeParser, IAddressModelFactory addressModelFactory, IAddressService addressService, IAuthenticationService authenticationService, ICountryService countryService, ICurrencyService currencyService, ICustomerActivityService customerActivityService, ICustomerAttributeParser customerAttributeParser, ICustomerAttributeService customerAttributeService, ICustomerModelFactory customerModelFactory, ICustomerRegistrationService customerRegistrationService, ICustomerService customerService, IEventPublisher eventPublisher, IExportManager exportManager, IExternalAuthenticationService externalAuthenticationService, IGdprService gdprService, IGenericAttributeService genericAttributeService, IGiftCardService giftCardService, ILocalizationService localizationService, ILogger logger, IMultiFactorAuthenticationPluginManager multiFactorAuthenticationPluginManager, INewsLetterSubscriptionService newsLetterSubscriptionService, INotificationService notificationService, IOrderService orderService, IPictureService pictureService, IPriceFormatter priceFormatter, IProductService productService, IStateProvinceService stateProvinceService, IStoreContext storeContext, ITaxService taxService, IWorkContext workContext, IWorkflowMessageService workflowMessageService, LocalizationSettings localizationSettings, MediaSettings mediaSettings, MultiFactorAuthenticationSettings multiFactorAuthenticationSettings, StoreInformationSettings storeInformationSettings, TaxSettings taxSettings)
+        {
+            AddressSettings = addressSettings;
+            CaptchaSettings = captchaSettings;
+            _customerSettings = customerSettings;
+            _dateTimeSettings = dateTimeSettings;
+            DownloadService = downloadService;
+            _forumSettings = forumSettings;
+            _gdprSettings = gdprSettings;
+            _addressAttributeParser = addressAttributeParser;
+            AddressModelFactory = addressModelFactory;
+            _addressService = addressService;
+            AuthenticationService = authenticationService;
+            CountryService = countryService;
+            CurrencyService = currencyService;
+            _customerActivityService = customerActivityService;
+            _customerAttributeParser = customerAttributeParser;
+            _customerAttributeService = customerAttributeService;
+            _customerModelFactory = customerModelFactory;
+            _customerRegistrationService = customerRegistrationService;
+            _customerService = customerService;
+            _eventPublisher = eventPublisher;
+            _exportManager = exportManager;
+            ExternalAuthenticationService = externalAuthenticationService;
+            _gdprService = gdprService;
+            _genericAttributeService = genericAttributeService;
+            GiftCardService = giftCardService;
+            _localizationService = localizationService;
+            Logger = logger;
+            MultiFactorAuthenticationPluginManager = multiFactorAuthenticationPluginManager;
+            _newsLetterSubscriptionService = newsLetterSubscriptionService;
+            _notificationService = notificationService;
+            OrderService = orderService;
+            PictureService = pictureService;
+            PriceFormatter = priceFormatter;
+            ProductService = productService;
+            StateProvinceService = stateProvinceService;
+            _storeContext = storeContext;
+            _taxService = taxService;
+            _workContext = workContext;
+            _workflowMessageService = workflowMessageService;
+            LocalizationSettings = localizationSettings;
+            MediaSettings = mediaSettings;
+            MultiFactorAuthenticationSettings = multiFactorAuthenticationSettings;
+            StoreInformationSettings = storeInformationSettings;
             _taxSettings = taxSettings;
         }
 
