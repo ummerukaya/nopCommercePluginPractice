@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Misc",
+  "FriendlyName": "LoginManager",
+  "SystemName": "Misc.LoginManager",
+  "Version": "3.32",
+  "SupportedVersions": [ "4.40" ],
+  "Author": "nopCommerce team",
+  "DisplayOrder": 2,
+  "FileName": "Nop.Plugin.Misc.LoginManager.dll",
+  "Description": "This plugin allows to manage login validation"
+}
