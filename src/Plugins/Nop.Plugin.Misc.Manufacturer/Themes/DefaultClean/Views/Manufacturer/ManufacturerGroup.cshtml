@@ -1,0 +1,81 @@
+﻿
+@model ManufacturerGroupModel
+@{
+    Layout = "_ColumnsTwo";
+
+    ////title
+    //Html.AddTitleParts(T("PageTitle.Manufacturers").Text);
+    ////page class
+    //Html.AppendPageCssClassParts("html-manufacturer-list-page");
+}
+<div class="page manufacturer-list-page">
+    <div class="page-title">
+        <h1>@T("Manufacturers.List")</h1>
+    </div>
+
+    <div>
+        @foreach (var item in Model.GroupNames)
+        {
+            if (Model.AvailableGroupsName.Contains(item))
+            {
+                <button id="showButton" asp-for="item">
+                    @item
+                </button>
+            }
+            else
+            {
+                <button id="hiddenButton" disabled>
+                    @item
+                </button>
+            }
+        }
+    </div>
+
+    <div id="manufacturer">
+        @foreach (var id in Model.AvailableGroupsName)
+        {
+            <div asp-for="id">
+                <h2>@id</h2>
+            </div>
+            <div asp-for="id">
+                @foreach (var item in Model.ManufacturerModel.Where(x => x.GroupName==id))
+                {
+                    @await Html.PartialAsync("_ManufacturerAll", item);
+                }
+            </div>
+        }
+
+    </div>
+
+</div>
+
+<style>
+    #showButton {
+        width: 3rem;
+        height: 3rem;
+        font-weight: bold;
+    }
+    #showButton:hover{
+        background-color: black;
+    }
+    #hiddenButton {
+        width: 3rem;
+        height: 3rem;
+        font-weight: bold;
+        pointer-events:none;
+    }
+</style>
+
+<script>
+     $(document).ready(function() {
+        $("#@Html.IdFor(model => model.GroupNames)").click(toggleManufacturer);
+
+         toggleManufacturer();
+
+         function toggleManufacturer() {
+
+              $("#manufacturer #@Html.IdFor(model => model.GroupNames)").click(toggleManufacturer);
+
+         }
+    });
+</script>

@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Misc",
+  "FriendlyName": "Manufacturer",
+  "SystemName": "Misc.Manufacturer",
+  "Version": "3.32",
+  "SupportedVersions": [ "4.40" ],
+  "Author": "nopCommerce team",
+  "DisplayOrder": 3,
+  "FileName": "Nop.Plugin.Misc.Manufacturer.dll",
+  "Description": "This plugin allows to manage Manufacturer page"
+}
